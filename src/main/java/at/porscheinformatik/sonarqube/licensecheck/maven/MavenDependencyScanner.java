@@ -182,7 +182,7 @@ public class MavenDependencyScanner implements Scanner
             path = path.substring(0, lastDotIndex) + ".pom";
         }
 
-        Dependency dependency = new Dependency(groupId + ":" + artifactId, version, null);
+        Dependency dependency = new Dependency(groupId + ":" + artifactId, version, null, null);
         if (new File(path).exists())
         {
             dependency.setPomPath(path);

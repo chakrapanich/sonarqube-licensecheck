@@ -24,6 +24,9 @@ function buildDependenciesWorksheet(dependencies) {
           <Data ss:Type="String">License</Data>
         </Cell>
         <Cell>
+          <Data ss:Type="String">Reason</Data>
+        </Cell>
+        <Cell>
           <Data ss:Type="String">Status</Data>
         </Cell>
       </Row>`;
@@ -32,6 +35,7 @@ function buildDependenciesWorksheet(dependencies) {
   <Cell><Data ss:Type="String">${dependency.name}</Data></Cell>
   <Cell><Data ss:Type="String">${dependency.version}</Data></Cell>
   <Cell><Data ss:Type="String">${dependency.license}</Data></Cell>
+  <Cell><Data ss:Type="String">${dependency.reason}</Data></Cell>
   <Cell><Data ss:Type="String">${dependency.status}</Data></Cell>
 </Row>`;
   });

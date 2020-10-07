@@ -116,6 +116,20 @@ public class ValidateLicensesTest
     }
 
     @Test
+    public void checkSpdxAndCombination1()
+    {
+        SensorContext context = createContext();
+        NewIssue issue = new DefaultIssue(mock(DefaultInputProject.class), mock(SensorStorage.class));
+        when(context.newIssue()).thenReturn(issue);
+
+        validateLicenses.validateLicenses(deps(new Dependency("thing", "1.0", "(ABC AND Apache-2.0)")), context);
+
+        verify(context).newIssue();
+        assertThat(issue.toString(), containsString(LicenseCheckMetrics.LICENSE_CHECK_UNLISTED_KEY));
+    }
+
+
+    @Test
     public void checkSpdxAndCombinationNotAllowed()
     {
         SensorContext context = createContext();

@@ -135,7 +135,7 @@ public class PackageJsonDependencyScanner implements Scanner
                         }
                     }
 
-                    dependencies.add(new Dependency(packageName, packageJson.getString("version", null), license));
+                    dependencies.add(new Dependency(packageName, packageJson.getString("version", null), license, license));
 
                     if (resolveTransitiveDeps)
                     {
