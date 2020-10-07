@@ -40,7 +40,7 @@ class LicenseFinder
                 {
                     Parent parent = model.getParent();
                     Dependency dependency =
-                        new Dependency(parent.getGroupId() + ":" + parent.getArtifactId(), parent.getVersion(), null);
+                        new Dependency(parent.getGroupId() + ":" + parent.getArtifactId(), parent.getVersion(), null, null);
                     return getLicenses(DirectoryFinder.getPomPath(dependency,
                         DirectoryFinder.getMavenRepsitoryDir(userSettings, globalSettings)),
                         userSettings, globalSettings);

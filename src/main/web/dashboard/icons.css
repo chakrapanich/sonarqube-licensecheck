@@ -41,5 +41,12 @@ table th {
   cursor: pointer;
 }
 
+.color-red {
+  color: red;
+}
+
+.color-orange {
+  color: orange;
+}
 
 th:first-letter { text-transform: uppercase }

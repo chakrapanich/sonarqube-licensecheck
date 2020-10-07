@@ -43,7 +43,8 @@ public class ValidateLicensesTest
         when(projectDefinition.getParent()).thenReturn(projectDefinition);
         final LicenseService licenseService = mock(LicenseService.class);
         when(licenseService.getLicenses(projectDefinition)).thenReturn(Arrays.asList(new License("MIT", "MIT", "false"),
-            new License("LGPL is fantastic", "LGPL", "true"), APACHE_LICENSE));
+            new License("LGPL is fantastic", "LGPL", "true"),
+            new License("GNU General Public License v3.0 only", "GPL-3.0", "false"), APACHE_LICENSE));
         validateLicenses = new ValidateLicenses(licenseService);
     }
 
@@ -113,6 +114,20 @@ public class ValidateLicensesTest
 
         verify(context, never()).newIssue();
     }
+
+    @Test
+    public void checkSpdxAndCombination1()
+    {
+        SensorContext context = createContext();
+        NewIssue issue = new DefaultIssue(mock(DefaultInputProject.class), mock(SensorStorage.class));
+        when(context.newIssue()).thenReturn(issue);
+
+        validateLicenses.validateLicenses(deps(new Dependency("thing", "1.0", "(ABC AND Apache-2.0)")), context);
+
+        verify(context).newIssue();
+        assertThat(issue.toString(), containsString(LicenseCheckMetrics.LICENSE_CHECK_UNLISTED_KEY));
+    }
+
 
     @Test
     public void checkSpdxAndCombinationNotAllowed()

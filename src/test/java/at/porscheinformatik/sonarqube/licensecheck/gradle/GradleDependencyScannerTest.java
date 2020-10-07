@@ -23,6 +23,9 @@ public class GradleDependencyScannerTest
     {
         Map<Pattern, String> licenseMap = new HashMap<>();
         licenseMap.put(Pattern.compile(".*Apache.*2.*"), "Apache-2.0");
+        licenseMap.put(Pattern.compile(".*MIT.*"), "MIT");
+        licenseMap.put(Pattern.compile(".*GNU.*3\\.0.*"), "AGPL-3.0");
+
         MavenLicenseService licenseService = Mockito.mock(MavenLicenseService.class);
         when(licenseService.getLicenseMap()).thenReturn(licenseMap);
         return licenseService;
@@ -45,5 +48,16 @@ public class GradleDependencyScannerTest
 
         Set<Dependency> dependencies = scanner.scan(new File(absolutePath));
         assertEquals(43, dependencies.size());
+    }
+
+    @Test
+    public void testScannerForMinJson()
+    {
+        GradleDependencyScanner scanner = new GradleDependencyScanner(mockLicenseService());
+        Path resourceDirectory = Paths.get("src", "test", "resources","min");
+        String absolutePath = resourceDirectory.toFile().getAbsolutePath();
+
+        Set<Dependency> dependencies = scanner.scan(new File(absolutePath));
+        assertEquals(1, dependencies.size());
     }
 }

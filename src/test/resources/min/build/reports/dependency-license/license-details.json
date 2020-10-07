@@ -1,0 +1,26 @@
+{
+  "dependencies": [
+    {
+      "moduleName": "org.apache.lucene:lucene-analyzers-common",
+      "moduleVersion": "8.6.2",
+      "moduleLicenses": [
+        {
+          "moduleLicense": "Apache 2",
+          "moduleLicenseUrl": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        },
+        {
+          "moduleLicense": "Apache License, Version 2.0",
+          "moduleLicenseUrl": "https://www.apache.org/licenses/LICENSE-2.0"
+        },
+        {
+          "moduleLicense": "COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0",
+          "moduleLicenseUrl": "https://opensource.org/licenses/CDDL-1.0"
+        },
+        {
+          "moduleLicense": "The Apache Software License, Version 2.0",
+          "moduleLicenseUrl": "http://www.apache.org/licenses/LICENSE-2.0.txt"
+        }
+      ]
+    }
+  ]
+}
