@@ -2,7 +2,7 @@
   <div class="boxed-group boxed-group-inner">
     <h3>Dependencies</h3>
     <table class="data zebra">
-      <caption>Here you see all project dependencies from Maven (including transitive) and NPM.</caption>
+      <caption>Here you see all project dependencies from Maven (including transitive),Gradle and NPM.</caption>
       <thead>
         <tr>
           <th v-for="dependency in columns" v-bind:key="dependency" v-on:click="sort(dependency)" scope="col"> {{dependency}} 
@@ -15,6 +15,11 @@
           <td>{{dependency.name}}</td>
           <td>{{dependency.version}}</td>
           <td>{{dependency.license}}</td>
+          <td>
+            <span
+               :class="{'color-red': dependency.status === 'Forbidden', 'color-orange': dependency.status === 'Unknown' }"
+             >{{dependency.reason}}</span>
+          </td>
           <td>
             <span
               :class="{ 'icon-license-ok': dependency.status === 'Allowed', 'icon-license-nok': dependency.status === 'Forbidden', 'icon-license-unknown': dependency.status === 'Unknown' }"
@@ -36,6 +41,7 @@ export default {
         name: "",
         version: "",
         license: "",
+        reason: "",
         status: ""
       },
       sortByDep: "status",

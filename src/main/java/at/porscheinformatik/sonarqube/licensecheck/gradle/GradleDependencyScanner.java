@@ -14,10 +14,7 @@ import javax.json.JsonObject;
 import javax.json.JsonReader;
 
 import java.io.*;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -46,10 +43,24 @@ public class GradleDependencyScanner implements Scanner
             return Collections.emptySet();
         }
 
-        return readLicenseDetailsJson(licenseDetailsJsonFile)
+        Map<String, Set<Dependency>> dependenciesMap = readLicenseDetailsJson(licenseDetailsJsonFile)
             .stream()
             .map(d -> mapMavenDependencyToLicense(defaultLicenseMap, d))
-            .collect(Collectors.toSet());
+            .collect(Collectors.groupingBy(Dependency::getName, Collectors.toSet()));
+
+        Set<Dependency> deps = new TreeSet<>(Comparator.comparing(Dependency::getName));
+        dependenciesMap.forEach((key, value) ->
+        {
+            if (value.size() == 1) {
+                deps.addAll(value);
+            } else {
+                String licenseName = value.stream().map(Dependency::getLicense).collect(Collectors.joining(" AND "));
+                Dependency d = value.iterator().next();
+                d.setLicense("(" + licenseName + ")");
+                deps.add(d);
+            }
+        });
+        return deps;
     }
 
     private Set<Dependency> readLicenseDetailsJson(File licenseDetailsJsonFile)
@@ -76,43 +87,37 @@ public class GradleDependencyScanner implements Scanner
         {
             JsonObject jsonDepObj = entry.asJsonObject();
             JsonArray arrModuleUrls = jsonDepObj.getJsonArray("moduleUrls");
-            String moduleLicense = getModuleLicenseFromJsonObject(jsonDepObj);
-            String moduleLicenseUrl = null;
-            if (arrModuleUrls != null)
-            {
-                moduleLicenseUrl = arrModuleUrls.getString(0, null);
-            }
-            Dependency dep = new Dependency(jsonDepObj.getString("moduleName", null),
-                jsonDepObj.getString("moduleVersion", null), moduleLicense);
-            dep.setPomPath(moduleLicenseUrl);
-            dependencySet.add(dep);
+            Set<String> moduleLicenseSet = getModuleLicenseSetFromJsonObject(jsonDepObj);
+
+            final String moduleLicenseUrl = arrModuleUrls != null ? arrModuleUrls.getString(0, null) : null;
+
+            Set<Dependency> moduleLicenseDependencySet = moduleLicenseSet.stream().map( ml -> {
+                Dependency dep = new Dependency(jsonDepObj.getString("moduleName", null),
+                    jsonDepObj.getString("moduleVersion", null), ml, ml);
+                dep.setPomPath(moduleLicenseUrl);
+                return dep;
+            }).collect(Collectors.toSet());
+            dependencySet.addAll(moduleLicenseDependencySet);
         }
     }
 
-    private String getModuleLicenseFromJsonObject(JsonObject jsonDepObj)
-    {
-        String moduleLicense = null;
+    private Set<String> getModuleLicenseSetFromJsonObject(JsonObject jsonDepObj) {
         JsonArray arrModuleLicenses = jsonDepObj.getJsonArray("moduleLicenses");
-        if (arrModuleLicenses != null)
-        {
-            moduleLicense = getModuleLicense(arrModuleLicenses);
+        if (arrModuleLicenses == null) {
+            return Collections.singleton(null);
         }
-        return moduleLicense;
-    }
-
-    private String getModuleLicense(JsonArray arrModuleLicenses)
-    {
-        String moduleLicense = null;
-        JsonObject firstJsonObj = arrModuleLicenses.getJsonObject(0);
-        if (firstJsonObj != null)
-        {
-            moduleLicense = firstJsonObj.getString("moduleLicense", null);
-            if (moduleLicense == null)
+        return arrModuleLicenses.getValuesAs(JsonObject.class).stream().map(license ->
             {
-                moduleLicense = firstJsonObj.getString("moduleLicenseUrl", null);
+                String moduleLicense = license.getString("moduleLicense", null);
+                if (moduleLicense == null) {
+                    moduleLicense = license.getString("moduleLicenseUrl", null);
+                    if (moduleLicense != null) {
+                        moduleLicense = moduleLicense.substring(0, moduleLicense.indexOf(","));
+                    }
+                }
+                return moduleLicense;
             }
-        }
-        return moduleLicense;
+        ).collect(Collectors.toSet());
     }
 
     private Dependency mapMavenDependencyToLicense(Map<Pattern, String> defaultLicenseMap, Dependency dependency)

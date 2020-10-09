@@ -1,10 +1,7 @@
 package at.porscheinformatik.sonarqube.licensecheck;
 
-import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
-
+import at.porscheinformatik.sonarqube.licensecheck.license.License;
+import at.porscheinformatik.sonarqube.licensecheck.license.LicenseService;
 import org.codehaus.plexus.util.StringUtils;
 import org.sonar.api.batch.sensor.SensorContext;
 import org.sonar.api.batch.sensor.issue.NewIssue;
@@ -14,13 +11,15 @@ import org.sonar.api.scanner.fs.InputProject;
 import org.sonar.api.utils.log.Logger;
 import org.sonar.api.utils.log.Loggers;
 
-import at.porscheinformatik.sonarqube.licensecheck.license.License;
-import at.porscheinformatik.sonarqube.licensecheck.license.LicenseService;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @ScannerSide
 public class ValidateLicenses
 {
     private static final Logger LOGGER = Loggers.get(ValidateLicenses.class);
+    private static final String AND = " AND ";
+
     private final LicenseService licenseService;
 
     public ValidateLicenses(LicenseService licenseService)
@@ -56,7 +55,7 @@ public class ValidateLicenses
         {
             for (License license : licenses)
             {
-                if (license.getIdentifier().equals(dependency.getLicense()))
+                if (license.getIdentifier().equals(dependency.getReason()))
                 {
                     usedLicenseList.add(license);
                 }
@@ -68,16 +67,26 @@ public class ValidateLicenses
     private void checkForLicenses(SensorContext context, Dependency dependency)
     {
         List<License> licenses = licenseService.getLicenses(context.project());
+        List<License> licensesContainingDependency = licenses.stream()
+            .filter(l -> dependency.getLicense().contains(l.getIdentifier()))
+            .collect(Collectors.toList());
+        String[] andLicenses = dependency.getLicense()
+            .replace("(", "")
+            .replace(")", "")
+            .split(AND);
+
+        List<String> projectLicenseNames = licensesContainingDependency.stream()
+            .map(License::getIdentifier)
+            .sorted()
+            .collect(Collectors.toList());
+        List<String> andLicenseList = Arrays.asList(andLicenses);
+        Collections.sort(andLicenseList);
+
         if (!checkSpdxLicense(dependency.getLicense(), licenses))
         {
-            List<License> licensesContainingDependency = licenses.stream()
-                .filter(l -> dependency.getLicense().contains(l.getIdentifier()))
-                .collect(Collectors.toList());
-
-            String[] andLicenses = dependency.getLicense().replace("(", "").replace(")", "").split(" AND ");
-
             if (licensesContainingDependency.size() != andLicenses.length)
             {
+                retainNotFoundLicenses(dependency, licensesContainingDependency, andLicenseList);
                 licenseNotFoundIssue(context, dependency);
             }
             else
@@ -93,6 +102,21 @@ public class ValidateLicenses
                 }
                 licenseNotAllowedIssue(context, dependency, notAllowedLicense.toString());
             }
+        } else {
+            if (!projectLicenseNames.isEmpty() && projectLicenseNames.containsAll(andLicenseList)) {
+                dependency.setReason(andLicenseList.get(0));
+            }
+        }
+    }
+
+    private void retainNotFoundLicenses(Dependency dependency, List<License> licensesContainingDependency, List<String> andLicenses) {
+        List<String> depLicenseNames = licensesContainingDependency.stream()
+            .map(License::getIdentifier)
+            .collect(Collectors.toList());
+        List<String> andLicensesList = new ArrayList<>(andLicenses);
+        andLicensesList.removeAll(depLicenseNames);
+        if (!andLicensesList.isEmpty()) {
+            dependency.setReason(andLicensesList.get(0));
         }
     }
 
@@ -103,7 +127,7 @@ public class ValidateLicenses
             return checkSpdxLicenseWithOr(spdxLicenseString, licenses);
         }
 
-        else if (spdxLicenseString.contains(" AND "))
+        else if (spdxLicenseString.contains(AND))
         {
             return checkSpdxLicenseWithAnd(spdxLicenseString, licenses);
         }
@@ -125,7 +149,7 @@ public class ValidateLicenses
 
     private boolean checkSpdxLicenseWithAnd(String spdxLicenseString, List<License> licenses)
     {
-        String[] andLicenses = spdxLicenseString.replace("(", "").replace(")", "").split(" AND ");
+        String[] andLicenses = spdxLicenseString.replace("(", "").replace(")", "").split(AND);
         long count = andLicenses.length;
         List<License> foundLicenses =
             licenses.stream()

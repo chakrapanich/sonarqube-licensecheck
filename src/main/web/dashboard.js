@@ -29,7 +29,7 @@ window.registerExtension('licensecheck/dashboard', function (options) {
           this.dependencies.forEach(dependency => {
             dependency.status = 'Unknown';
             this.licenses.forEach(license => {
-              if (dependency.license === license.identifier) {
+              if (dependency.reason === license.identifier) {
                 dependency.status = license.status === 'true' ? 'Allowed' : 'Forbidden';
               }
             });

@@ -1,18 +1,13 @@
 package at.porscheinformatik.sonarqube.licensecheck;
 
-import java.io.StringReader;
-import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Objects;
-import java.util.TreeSet;
-
 import javax.json.Json;
 import javax.json.JsonArray;
 import javax.json.JsonObject;
 import javax.json.JsonReader;
 import javax.json.stream.JsonGenerator;
+import java.io.StringReader;
+import java.io.StringWriter;
+import java.util.*;
 
 public class Dependency implements Comparable<Dependency>
 {
@@ -21,6 +16,7 @@ public class Dependency implements Comparable<Dependency>
     private String license;
     private Status status;
     private String pomPath;
+    private String reason;
 
     public Dependency(String name, String version, String license)
     {
@@ -28,6 +24,16 @@ public class Dependency implements Comparable<Dependency>
         this.name = name;
         this.version = version;
         this.license = license;
+        this.reason = license;
+    }
+
+    public Dependency(String name, String version, String license, String reason)
+    {
+        super();
+        this.name = name;
+        this.version = version;
+        this.license = license;
+        this.reason = reason;
     }
 
     public String getName()
@@ -80,6 +86,14 @@ public class Dependency implements Comparable<Dependency>
         this.pomPath = pomPath;
     }
 
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
+
     @Override
     public boolean equals(Object o)
     {
@@ -106,7 +120,7 @@ public class Dependency implements Comparable<Dependency>
     @Override
     public String toString()
     {
-        return "{name:" + name + ", version:" + version + ", license:" + license + "}";
+        return "{name:" + name + ", version:" + version + ", license:" + license + ", reason:" + reason + "}";
     }
 
     @Override
@@ -140,7 +154,7 @@ public class Dependency implements Comparable<Dependency>
                         JsonObject dependencyJson = dependenciesJson.getJsonObject(i);
                         dependencies.add(
                             new Dependency(dependencyJson.getString("name"), dependencyJson.getString("version"),
-                                dependencyJson.getString("license")));
+                                dependencyJson.getString("license"),dependencyJson.getString("reason")));
                     }
                 }
             }
@@ -155,7 +169,8 @@ public class Dependency implements Comparable<Dependency>
                     String name = subParts.length > 0 ? subParts[0] : null;
                     String version = subParts.length > 1 ? subParts[1] : null;
                     String license = subParts.length > 2 ? subParts[2] : null;
-                    dependencies.add(new Dependency(name, version, license));
+                    String reason = subParts.length > 3 ? subParts[3] : null;
+                    dependencies.add(new Dependency(name, version, license, reason));
                 }
             }
         }
@@ -177,6 +192,7 @@ public class Dependency implements Comparable<Dependency>
             generator.write("name", dependency.getName());
             generator.write("version", dependency.getVersion());
             generator.write("license", license != null ? license : " ");
+            generator.write("reason", dependency.getReason() != null ? dependency.getReason() : " ");
             generator.writeEnd();
         }
         generator.writeEnd();
