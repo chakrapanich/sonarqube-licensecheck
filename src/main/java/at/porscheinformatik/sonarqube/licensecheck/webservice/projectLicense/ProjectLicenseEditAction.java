@@ -27,7 +27,8 @@ class ProjectLicenseEditAction implements RequestHandler
         ProjectLicense projectLicense = new ProjectLicense(
             request.mandatoryParam(ProjectLicenseConfiguration.PARAM_PROJECT_KEY),
             request.mandatoryParam(ProjectLicenseConfiguration.PARAM_LICENSE),
-            request.mandatoryParam(ProjectLicenseConfiguration.PARAM_STATUS)
+            request.mandatoryParam(ProjectLicenseConfiguration.PARAM_STATUS),
+            request.mandatoryParam(ProjectLicenseConfiguration.PARAM_ACKNOWLEDGEMENT)
         );
         boolean success = projectLicenseSettingsService.updateProjectLicense(projectLicense);
 

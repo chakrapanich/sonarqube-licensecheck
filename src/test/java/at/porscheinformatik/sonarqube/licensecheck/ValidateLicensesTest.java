@@ -30,7 +30,7 @@ import at.porscheinformatik.sonarqube.licensecheck.license.LicenseService;
 
 public class ValidateLicensesTest
 {
-    private static final License APACHE_LICENSE = new License("Apache-2.0", "Apache-2.0", "true");
+    private static final License APACHE_LICENSE = new License("Apache-2.0", "Apache-2.0", "true", "yes");
     private ValidateLicenses validateLicenses;
     private ProjectDefinition projectDefinition;
 
@@ -42,9 +42,9 @@ public class ValidateLicensesTest
         when(projectDefinition.getWorkDir()).thenReturn(new File("."));
         when(projectDefinition.getParent()).thenReturn(projectDefinition);
         final LicenseService licenseService = mock(LicenseService.class);
-        when(licenseService.getLicenses(projectDefinition)).thenReturn(Arrays.asList(new License("MIT", "MIT", "false"),
-            new License("LGPL is fantastic", "LGPL", "true"),
-            new License("GNU General Public License v3.0 only", "GPL-3.0", "false"), APACHE_LICENSE));
+        when(licenseService.getLicenses(projectDefinition)).thenReturn(Arrays.asList(new License("MIT", "MIT", "false", "yes"),
+            new License("LGPL is fantastic", "LGPL", "true", "yes"),
+            new License("GNU General Public License v3.0 only", "GPL-3.0", "false","yes"), APACHE_LICENSE));
         validateLicenses = new ValidateLicenses(licenseService);
     }
 

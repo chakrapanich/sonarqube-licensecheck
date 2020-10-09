@@ -50,9 +50,9 @@ public class LicenseSettingsService
         return licenseString.toString();
     }
 
-    public boolean addLicense(String name, String identifier, String status)
+    public boolean addLicense(String name, String identifier, String status, String acknowledgement)
     {
-        License newLicense = new License(name, identifier, status);
+        License newLicense = new License(name, identifier, status, acknowledgement);
         return addLicense(newLicense);
     }
 
@@ -108,7 +108,7 @@ public class LicenseSettingsService
         return found;
     }
 
-    public boolean updateLicense(final String id, final String newName, final String newStatus)
+    public boolean updateLicense(final String id, final String newName, final String newStatus, final String acknowledgement)
     {
         List<License> licenses = licenseService.getLicenses();
 
@@ -118,6 +118,7 @@ public class LicenseSettingsService
             {
                 license.setName(newName);
                 license.setStatus(newStatus);
+                license.setAcknowledgement(acknowledgement);
                 saveSettings(licenses);
                 return true;
             }

@@ -3,6 +3,7 @@ package at.porscheinformatik.sonarqube.licensecheck.webservice.license;
 import static at.porscheinformatik.sonarqube.licensecheck.webservice.configuration.LicenseConfiguration.PARAM_IDENTIFIER;
 import static at.porscheinformatik.sonarqube.licensecheck.webservice.configuration.LicenseConfiguration.PARAM_NAME;
 import static at.porscheinformatik.sonarqube.licensecheck.webservice.configuration.LicenseConfiguration.PARAM_STATUS;
+import static at.porscheinformatik.sonarqube.licensecheck.webservice.configuration.LicenseConfiguration.PARAM_ACKNOWLEDGEMENT;
 
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.RequestHandler;
@@ -31,7 +32,8 @@ class LicenseAddAction implements RequestHandler
         License newLicense = new License(
             request.mandatoryParam(PARAM_NAME),
             request.mandatoryParam(PARAM_IDENTIFIER),
-            request.mandatoryParam(PARAM_STATUS)
+            request.mandatoryParam(PARAM_STATUS),
+            request.mandatoryParam(PARAM_ACKNOWLEDGEMENT)
         );
 
         if (licenseSettingsService.addLicense(newLicense))

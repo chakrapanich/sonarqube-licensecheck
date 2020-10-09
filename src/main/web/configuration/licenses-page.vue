@@ -21,6 +21,7 @@
             <th @click="sort('identifier')" scope="col">Identifier<div class="arrow" v-if="sortBy === 'identifier'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
             <th @click="sort('name')" scope="col">Name<div class="arrow" v-if="sortBy === 'name'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
             <th @click="sort('status')" scope="col">Allowed<div class="arrow" v-if="sortBy === 'status'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
+            <th @click="sort('acknowledgement')" scope="col">Acknowledgement<div class="arrow" v-if="sortBy === 'acknowledgement'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
             <th scope="col">Actions</th>
            </tr>
         </thead>
@@ -29,6 +30,7 @@
             <td class="thin">{{item.identifier}}</td>
             <td>{{item.name}}</td>
             <td>{{item.status}}</td>
+            <td>{{item.acknowledgement}}</td>
             <td class="thin nowrap">
               <a class="button button-link" @click="showEditDialog(item)" title="Edit item">
                 <svgicon icon="pencil" width="16" height="16" style="fill: rgb(35, 106, 151)"></svgicon>
@@ -60,6 +62,13 @@
           <select required v-model="itemToEdit.status" id="itemStatusEdit" name="itemStatusEdit">
             <option value="true">true</option>
             <option value="false">false</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label for="itemAcknowledgementEdit">Acknowledgement<em class="mandatory">*</em></label>
+          <select required v-model="itemToEdit.acknowledgement" id="itemAcknowledgementEdit" name="itemAcknowledgementEdit">
+            <option value="yes">yes</option>
+            <option value="no">no</option>
           </select>
         </div>
       </div>

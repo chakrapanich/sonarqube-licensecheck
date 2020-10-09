@@ -21,6 +21,7 @@
             <th @click="sort('projectName')" scope="col">Project<div class="arrow" v-if="sortBy === 'projectName'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
             <th @click="sort('license')" scope="col">License<div class="arrow" v-if="sortBy === 'license'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
             <th @click="sort('status')" scope="col">Actions<div class="arrow" v-if="sortBy === 'status'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
+            <th @click="sort('acknowledgment')" scope="col">Acknowledgement<div class="arrow" v-if="sortBy === 'acknowledgement'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
             <th scope="col">Allowed</th>
           </tr>
         </thead>
@@ -67,6 +68,13 @@
           <select required v-model="itemToEdit.status" id="itemStatusEdit" name="itemStatusEdit">
             <option value="true">true</option>
             <option value="false">false</option>
+          </select>
+        </div>
+        <div class="modal-field">
+          <label for="itemAcknowledgementEdit">Acknowledgement<em class="mandatory">*</em></label>
+          <select required v-model="itemToEdit.acknowledgement" id="itemAcknowledgementEdit" name="itemAcknowledgementEdit">
+            <option value="yes">yes</option>
+            <option value="no">no</option>
           </select>
         </div>
       </div>

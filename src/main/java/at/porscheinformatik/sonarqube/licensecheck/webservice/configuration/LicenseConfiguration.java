@@ -5,6 +5,7 @@ public final class LicenseConfiguration
     public static final String PARAM_NAME = "name";
     public static final String PARAM_IDENTIFIER = "identifier";
     public static final String PARAM_STATUS = "status";
+    public static final String PARAM_ACKNOWLEDGEMENT = "acknowledgement";
 
     public static final String CONTROLLER = "api/licensecheck/licenses";
 

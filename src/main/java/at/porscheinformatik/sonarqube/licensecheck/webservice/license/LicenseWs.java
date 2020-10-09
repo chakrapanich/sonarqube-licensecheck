@@ -39,6 +39,7 @@ public class LicenseWs implements WebService
             .setHandler(new LicenseAddAction(licenseSettingsService));
         addAction.createParam(LicenseConfiguration.PARAM_IDENTIFIER).setRequired(true);
         addAction.createParam(LicenseConfiguration.PARAM_STATUS).setPossibleValues("true", "false").setRequired(true);
+        addAction.createParam(LicenseConfiguration.PARAM_ACKNOWLEDGEMENT).setPossibleValues("yes", "no").setRequired(true);
         addAction.createParam(LicenseConfiguration.PARAM_NAME).setRequired(true);
 
         NewAction editAction = controller
@@ -47,6 +48,7 @@ public class LicenseWs implements WebService
             .setHandler(new LicenseEditAction(licenseSettingsService));
         editAction.createParam(LicenseConfiguration.PARAM_IDENTIFIER).setRequired(true);
         editAction.createParam(LicenseConfiguration.PARAM_STATUS).setPossibleValues("true", "false").setRequired(true);
+        editAction.createParam(LicenseConfiguration.PARAM_ACKNOWLEDGEMENT).setPossibleValues("yes", "no").setRequired(true);
         editAction.createParam(LicenseConfiguration.PARAM_NAME).setRequired(true);
 
         controller.done();

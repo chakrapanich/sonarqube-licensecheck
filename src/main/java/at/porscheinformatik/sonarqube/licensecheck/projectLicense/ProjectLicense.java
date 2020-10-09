@@ -19,13 +19,15 @@ public class ProjectLicense implements Comparable<ProjectLicense>
     private final String projectKey;
     private final String license;
     private final String status;
+    private final String acknowledgement;
 
-    public ProjectLicense(String projectKey, String license, String status)
+    public ProjectLicense(String projectKey, String license, String status, String acknowledgement)
     {
         super();
         this.projectKey = projectKey;
         this.license = license;
         this.status = status;
+        this.acknowledgement = acknowledgement;
     }
 
     public String getProjectKey()
@@ -43,6 +45,10 @@ public class ProjectLicense implements Comparable<ProjectLicense>
         return status;
     }
 
+    public String getAcknowledgement() {
+        return acknowledgement;
+    }
+
     public static String createString(Collection<ProjectLicense> projectLicenses)
     {
         TreeSet<ProjectLicense> projectLicenseSet = new TreeSet<>();
@@ -57,6 +63,7 @@ public class ProjectLicense implements Comparable<ProjectLicense>
             generator.write("projectKey", projectLicense.getProjectKey());
             generator.write("license", projectLicense.getLicense());
             generator.write("status", projectLicense.getStatus());
+            generator.write("acknowledgement", projectLicense.getAcknowledgement());
             generator.writeEnd();
         }
         generator.writeEnd();
@@ -78,7 +85,9 @@ public class ProjectLicense implements Comparable<ProjectLicense>
                 projectLicenses.add(new ProjectLicense(
                     projectLicenseJson.getString("projectKey"),
                     projectLicenseJson.getString("license"),
-                    projectLicenseJson.getString("status")));
+                    projectLicenseJson.getString("status"),
+                    projectLicenseJson.getString("acknowledgement", ""))
+                    );
             }
         }
 

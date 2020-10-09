@@ -3,6 +3,7 @@ package at.porscheinformatik.sonarqube.licensecheck.webservice.license;
 import static at.porscheinformatik.sonarqube.licensecheck.webservice.configuration.LicenseConfiguration.PARAM_IDENTIFIER;
 import static at.porscheinformatik.sonarqube.licensecheck.webservice.configuration.LicenseConfiguration.PARAM_NAME;
 import static at.porscheinformatik.sonarqube.licensecheck.webservice.configuration.LicenseConfiguration.PARAM_STATUS;
+import static at.porscheinformatik.sonarqube.licensecheck.webservice.configuration.LicenseConfiguration.PARAM_ACKNOWLEDGEMENT;
 
 import org.sonar.api.server.ws.Request;
 import org.sonar.api.server.ws.RequestHandler;
@@ -30,9 +31,10 @@ class LicenseEditAction implements RequestHandler
         String id = request.mandatoryParam(PARAM_IDENTIFIER);
         String newName = request.mandatoryParam(PARAM_NAME);
         String newStatus = request.mandatoryParam(PARAM_STATUS);
+        String newAcknowledgement = request.mandatoryParam(PARAM_ACKNOWLEDGEMENT);
 
-        licenseSettingsService.updateLicense(id, newName, newStatus);
-        LOGGER.info(LicenseConfiguration.INFO_EDIT_SUCCESS, id, newName, newStatus);
+        licenseSettingsService.updateLicense(id, newName, newStatus, newAcknowledgement);
+        LOGGER.error(LicenseConfiguration.INFO_EDIT_SUCCESS, id, newName, newStatus, newAcknowledgement);
         response.stream().setStatus(HTTPConfiguration.HTTP_STATUS_OK);
     }
 }

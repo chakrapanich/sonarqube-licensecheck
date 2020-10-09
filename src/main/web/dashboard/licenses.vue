@@ -18,6 +18,7 @@
             <span :class="{ 'icon-license-ok': license.status === 'true', 'icon-license-nok': license.status !== 'true' }"></span>
             {{license.status}}
           </td>
+          <td>{{license.acknowledgement}}</td>
         </tr>
       </tbody>
     </table>
@@ -34,7 +35,8 @@ props: ["licenses"],
       license: {
         identifier: "",
         name: "",
-        status: ""
+        status: "",
+        acknowledgement: ""
       },
       sortBy: 'status',
       sortDirection: 'asc'
