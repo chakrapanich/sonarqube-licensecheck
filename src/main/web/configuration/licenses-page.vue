@@ -21,6 +21,7 @@
             <th @click="sort('identifier')" scope="col">Identifier<div class="arrow" v-if="sortBy === 'identifier'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
             <th @click="sort('name')" scope="col">Name<div class="arrow" v-if="sortBy === 'name'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
             <th @click="sort('status')" scope="col">Status<div class="arrow" v-if="sortBy === 'status'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
+            <th @click="sort('acknowledgement')" scope="col">Acknowledgement<div class="arrow" v-if="sortBy === 'acknowledgement'" v-bind:class="{ 'arrow_up' : sortDirection === 'asc', 'arrow_down' : sortDirection === 'desc'}"></div></th>
             <th scope="col">Actions</th>
            </tr>
         </thead>
@@ -32,6 +33,7 @@
               <span :class="{ 'icon-license-ok': item.status === 'true', 'icon-license-nok': item.status === 'false' }"></span>
               {{item.status === 'true' ? 'Allowed': 'Forbidden'}}
             </td>
+            <td>{{item.acknowledgement}}</td>
             <td class="thin nowrap">
               <a class="button" @click="showEditDialog(item)" title="Edit item">
                 <svgicon icon="pencil" width="16" height="16" style="fill: currentcolor"></svgicon>
@@ -63,6 +65,13 @@
           <label for="itemStatusEdit">
             <input type="checkbox" id="itemStatusEdit" name="itemStatusEdit" v-model="itemToEdit.status" true-value="true" false-value="false">
             Allowed
+          </label>
+        </div>
+        <div class="modal-field">
+          <label>Acknowledgement<em class="mandatory">*</em></label>
+          <label for="itemStatusEdit">
+            <input type="checkbox" id="acknowledgement" name="itemStatusEdit" v-model="itemToEdit.status" true-value="yes" false-value="no">
+            Acknowledgement
           </label>
         </div>
       </div>

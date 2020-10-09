@@ -10,6 +10,7 @@ public final class ProjectLicenseConfiguration
     public static final String PARAM_PROJECT_KEY = "projectKey";
     public static final String PARAM_LICENSE = "license";
     public static final String PARAM_STATUS = "status";
+    public static final String PARAM_ACKNOWLEDGEMENT = "acknowledgement";
 
     public static final String CONTROLLER = "api/licensecheck/project-licenses";
 

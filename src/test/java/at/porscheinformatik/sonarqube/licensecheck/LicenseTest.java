@@ -14,12 +14,12 @@ import at.porscheinformatik.sonarqube.licensecheck.license.License;
 public class LicenseTest
 {
     private static final String LICENSES_JSON =
-        "[{\"name\":\"Apache 2.0\",\"identifier\":\"Apache-2.0\",\"status\":\"true\"}," +
-            "{\"name\":\"MIT License\",\"identifier\":\"MIT\",\"status\":\"false\"}]";
+        "[{\"name\":\"Apache 2.0\",\"identifier\":\"Apache-2.0\",\"status\":\"true\",\"acknowledgement\":\"yes\"}," +
+            "{\"name\":\"MIT License\",\"identifier\":\"MIT\",\"status\":\"false\",\"acknowledgement\":\"yes\"}]";
     private static final String LICENSES_STRING = "Apache 2.0~Apache-2.0~true;MIT License~MIT~false;";
 
-    private static final License LIC1 = new License("Apache 2.0", "Apache-2.0", "true");
-    private static final License LIC2 = new License("MIT License", "MIT", "false");
+    private static final License LIC1 = new License("Apache 2.0", "Apache-2.0", "true","yes");
+    private static final License LIC2 = new License("MIT License", "MIT", "false","yes");
 
     @Test
     public void createString()

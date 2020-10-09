@@ -42,9 +42,11 @@ public class ProjectLicenseWs implements WebService
             .setHandler(new ProjectLicenseAddAction(projectLicenseSettingsService));
         addAction.createParam(ProjectLicenseConfiguration.PARAM_PROJECT_KEY).setRequired(true);
         addAction.createParam(ProjectLicenseConfiguration.PARAM_LICENSE).setRequired(true);
-        addAction.createParam(ProjectLicenseConfiguration.PARAM_STATUS)
-            .setRequired(true)
+        addAction.createParam(ProjectLicenseConfiguration.PARAM_STATUS).setRequired(true)
             .setPossibleValues("true", "false");
+        addAction.createParam(ProjectLicenseConfiguration.PARAM_ACKNOWLEDGEMENT)
+            .setRequired(true)
+            .setPossibleValues("yes", "no");
 
         NewAction editAction = controller
             .createAction(ProjectLicenseConfiguration.EDIT_ACTION)
@@ -57,6 +59,9 @@ public class ProjectLicenseWs implements WebService
         editAction.createParam(ProjectLicenseConfiguration.PARAM_STATUS)
             .setRequired(true)
             .setPossibleValues("true", "false");
+        editAction.createParam(ProjectLicenseConfiguration.PARAM_ACKNOWLEDGEMENT)
+            .setRequired(true)
+            .setPossibleValues("yes", "no");
 
         controller.done();
     }

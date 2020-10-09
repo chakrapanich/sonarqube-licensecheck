@@ -43,7 +43,8 @@ public class LicenseService
             {
                 if (license.getIdentifier().equals(projectLicense.getLicense()))
                 {
-                    license.setStatus(projectLicense.getStatus()); //override the stati of the globalLicenses
+                    license.setStatus(projectLicense.getStatus()); //override the static of the globalLicenses
+                    license.setAcknowledgement(projectLicense.getAcknowledgement());
                 }
             }
         }

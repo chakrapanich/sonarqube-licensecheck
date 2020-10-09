@@ -31,7 +31,7 @@ import at.porscheinformatik.sonarqube.licensecheck.license.LicenseService;
 
 public class ValidateLicensesTest
 {
-    private static final License APACHE_LICENSE = new License("Apache-2.0", "Apache-2.0", "true");
+    private static final License APACHE_LICENSE = new License("Apache-2.0", "Apache-2.0", "true", "yes");
     private ValidateLicenses validateLicenses;
     private ProjectDefinition projectDefinition;
     private InputProject module;

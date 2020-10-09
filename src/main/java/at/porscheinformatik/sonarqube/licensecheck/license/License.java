@@ -23,13 +23,15 @@ public class License implements Comparable<License>
     private String name;
     private String identifier;
     private String status;
+    private String acknowledgement;
 
-    public License(String name, String identifier, String status)
+    public License(String name, String identifier, String status, String acknowledgement)
     {
         super();
         this.name = name;
         this.identifier = identifier;
         this.status = status;
+        this.acknowledgement = acknowledgement;
     }
 
     public String getName()
@@ -62,10 +64,18 @@ public class License implements Comparable<License>
         this.status = status;
     }
 
+    public String getAcknowledgement() {
+        return acknowledgement;
+    }
+
+    public void setAcknowledgement(String acknowledgement) {
+        this.acknowledgement = acknowledgement;
+    }
+
     @Override
     public String toString()
     {
-        return "{name:" + name + ", identifier:" + identifier + ", status:" + status + "}";
+        return "{name:" + name + ", identifier:" + identifier + ", status:" + status + ", acknowledgement:" + acknowledgement + "}";
     }
 
     public static List<License> fromString(String serializedLicensesString)
@@ -85,7 +95,7 @@ public class License implements Comparable<License>
                 for (JsonObject licenseJson : licensesJson.getValuesAs(JsonObject.class))
                 {
                     licenses.add(new License(licenseJson.getString("name"), licenseJson.getString("identifier"),
-                        licenseJson.getString("status")));
+                        licenseJson.getString("status"), licenseJson.getString("acknowledgement", "")));
                 }
             }
             return licenses;
@@ -120,7 +130,8 @@ public class License implements Comparable<License>
                 String name = subParts.length > 0 ? subParts[0] : null;
                 String identifier = subParts.length > 1 ? subParts[1] : null;
                 String status = subParts.length > 2 ? subParts[2] : null;
-                licenses.add(new License(name, identifier, status));
+                String acknowledgement = subParts.length > 3 ? subParts[3] : null;
+                licenses.add(new License(name, identifier, status, acknowledgement));
             }
         }
 
@@ -144,7 +155,7 @@ public class License implements Comparable<License>
             {
                 JsonObject value = (JsonObject) licenseJson.getValue();
                 licenses.add(new License(value.getString("name"), licenseJson.getKey(),
-                    value.getString("status")));
+                    value.getString("status"), value.getString("acknowledgement", "")));
             }
         }
 
@@ -164,6 +175,7 @@ public class License implements Comparable<License>
             generator.write("name", license.getName());
             generator.write("identifier", license.getIdentifier());
             generator.write("status", license.getStatus());
+            generator.write("acknowledgement", license.getAcknowledgement());
             generator.writeEnd();
         }
         generator.writeEnd();
