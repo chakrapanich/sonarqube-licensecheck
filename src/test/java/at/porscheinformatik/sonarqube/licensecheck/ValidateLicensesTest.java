@@ -42,8 +42,8 @@ public class ValidateLicensesTest
         module = mock(InputProject.class);
         when(module.key()).thenReturn("at.porscheinformatik.demo:demo");
         final LicenseService licenseService = mock(LicenseService.class);
-        when(licenseService.getLicenses(module)).thenReturn(Arrays.asList(new License("MIT", "MIT", "false"),
-            new License("LGPL is fantastic", "LGPL", "true"), APACHE_LICENSE));
+        when(licenseService.getLicenses(module)).thenReturn(Arrays.asList(new License("MIT", "MIT", "false", "yes"),
+            new License("LGPL is fantastic", "LGPL", "true", "yes"), APACHE_LICENSE));
         validateLicenses = new ValidateLicenses(licenseService);
     }
 

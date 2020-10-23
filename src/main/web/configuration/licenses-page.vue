@@ -68,10 +68,10 @@
           </label>
         </div>
         <div class="modal-field">
-          <label>Acknowledgement<em class="mandatory">*</em></label>
-          <label for="itemStatusEdit">
-            <input type="checkbox" id="acknowledgement" name="itemStatusEdit" v-model="itemToEdit.status" true-value="yes" false-value="no">
-            Acknowledgement
+          <label>Acknowledgement</label>
+          <label for="itemAcknowledgementEdit">
+            <input type="checkbox" id="itemAcknowledgementEdit" name="itemAcknowledgementEdit" v-model="itemToEdit.acknowledgement" true-value="yes" false-value="no">
+            yes
           </label>
         </div>
       </div>

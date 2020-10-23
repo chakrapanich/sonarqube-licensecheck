@@ -29,8 +29,7 @@ public class ValidateLicenses
 
     public Set<Dependency> validateLicenses(Set<Dependency> dependencies, SensorContext context)
     {
-        DefaultInputModule module = (DefaultInputModule) context.module();
-        List<License> licenses = licenseService.getLicenses(LicenseCheckPlugin.getRootProject(module.definition()));
+        List<License> licenses = licenseService.getLicenses(context.project());
         for (Dependency dependency : dependencies)
         {
             dependency.setStatus(Dependency.Status.Allowed);
@@ -152,7 +151,7 @@ public class ValidateLicenses
 
     private boolean checkSpdxLicenseWithAnd(String spdxLicenseString, List<License> licenses)
     {
-        String[] andLicenses = spdxLicenseString.replace("(", "").replace(")", "").split(" AND ");
+        String[] andLicenses = spdxLicenseString.replace("(", "").replace(")", "").split(AND);
         long count = andLicenses.length;
         List<License> foundLicenses =
             licenses.stream()
